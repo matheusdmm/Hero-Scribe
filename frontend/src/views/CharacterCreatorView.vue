@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-4xl mx-auto px-6 py-10">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
     <StepIndicator :steps="STEPS" :current="store.currentStep" class="mb-10" />
 
     <div v-if="store.loading" class="text-center py-20 text-stone-400">Loading...</div>

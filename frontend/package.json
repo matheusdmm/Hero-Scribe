@@ -8,6 +8,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@vercel/analytics": "^2.0.1",
     "html2pdf.js": "^0.14.0",
     "pinia": "^2.1.0",
     "vue": "^3.4.0",

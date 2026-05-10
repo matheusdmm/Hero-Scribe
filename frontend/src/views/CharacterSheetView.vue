@@ -36,11 +36,17 @@
             </span>
           </div>
         </div>
-        <div class="flex gap-2 shrink-0 no-print">
-          <button class="btn-secondary text-sm" @click="exportJSON">Export JSON</button>
-          <button class="btn-secondary text-sm" @click="savePDF">Save as PDF</button>
+        <div class="flex flex-wrap gap-2 shrink-0 no-print">
+          <button class="btn-secondary text-sm !px-3 sm:!px-6" @click="exportJSON">
+            <span class="sm:hidden">JSON</span>
+            <span class="hidden sm:inline">Export JSON</span>
+          </button>
+          <button class="btn-secondary text-sm !px-3 sm:!px-6" @click="savePDF">
+            <span class="sm:hidden">PDF</span>
+            <span class="hidden sm:inline">Save as PDF</span>
+          </button>
           <button
-            class="btn-secondary text-sm flex items-center gap-1.5"
+            class="btn-secondary text-sm !px-3 sm:!px-6 flex items-center gap-1.5"
             :class="store.isSaved ? 'text-gold border-gold' : ''"
             @click="toggleSave"
           >
@@ -50,7 +56,10 @@
             </svg>
             {{ store.isSaved ? 'Saved' : 'Save' }}
           </button>
-          <RouterLink to="/create" class="btn-primary text-sm">New Character</RouterLink>
+          <RouterLink to="/create" class="btn-primary text-sm !px-3 sm:!px-6">
+            <span class="sm:hidden">New</span>
+            <span class="hidden sm:inline">New Character</span>
+          </RouterLink>
         </div>
       </div>
 
