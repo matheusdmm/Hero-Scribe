@@ -27,7 +27,7 @@ export default {
       },
       fontFamily: {
         display: ['"MedievalSharp"', 'serif'],
-        body: ['"Crimson Text"', 'Georgia', 'serif'],
+        body: ['"Redaction 10"', '"Crimson Text"', 'Georgia', 'serif'],
       },
       borderRadius: {
         DEFAULT: '0.375rem',

@@ -47,7 +47,7 @@
     <!-- ── DIVIDER ── -->
     <div class="flex items-center gap-4 max-w-xs mx-auto px-6 mb-14">
       <div class="flex-1 h-px bg-gradient-to-r from-transparent via-stone-600 to-transparent" />
-      <span class="text-stone-500 text-[10px] tracking-[0.4em] uppercase shrink-0">What you get</span>
+      <span class="text-stone-500 text-[10px] tracking-[0.4em] uppercase shrink-0">Features</span>
       <div class="flex-1 h-px bg-gradient-to-r from-transparent via-stone-600 to-transparent" />
     </div>
 
@@ -217,6 +217,6 @@
   transition: transform 0.3s ease;
 }
 .feat:hover .feat-icon {
-  transform: scale(1.15);
+  transform: translateX(5px);
 }
 </style>

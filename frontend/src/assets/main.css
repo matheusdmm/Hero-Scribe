@@ -22,6 +22,7 @@
   --c-crimson:   130 48 56;  /* #823038 */
   --c-vivid:     74 104 0;   /* #4a6800 */
   --shadow-rgb: 30, 0, 14;  /* comma-separated for rgba() in box-shadow */
+  --glow-color: rgba(184, 144, 10, 0.05);
 }
 
 /* ── Dark theme (deep forest green & gold) ──────────────────────────── */
@@ -44,6 +45,7 @@ html.dark {
   --c-crimson:   168 64 80;   /* #a84050 */
   --c-vivid:     82 181 104;  /* #52b568 */
   --shadow-rgb: 5, 20, 8;    /* comma-separated for rgba() in box-shadow */
+  --glow-color: rgba(212, 168, 32, 0.08);
 }
 
 /* ── Print ──────────────────────────────────────────────────────────── */
