@@ -1,6 +1,6 @@
 <template>
   <div
-    class="bg-white border p-4 rounded-xl transition-all duration-200"
+    class="bg-stone-900 border p-4 rounded-xl transition-all duration-200"
     :class="[
       selected
         ? 'border-gold ring-1 ring-gold/40 shadow-card-hover'

@@ -2,7 +2,7 @@
   <div class="overflow-x-hidden">
 
     <!-- ── HERO ── -->
-    <section class="relative max-w-4xl mx-auto px-6 pt-24 pb-20 text-center">
+    <section class="relative min-h-[calc(100vh-4rem)] max-w-4xl mx-auto px-6 flex flex-col items-center justify-center text-center pb-10">
 
       <!-- Ambient glow behind icon -->
       <div class="absolute inset-0 flex items-start justify-center pt-16 pointer-events-none" aria-hidden="true">

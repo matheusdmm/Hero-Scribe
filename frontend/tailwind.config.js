@@ -1,29 +1,29 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: 'class',
   content: ['./index.html', './src/**/*.{vue,js,ts}'],
   theme: {
     extend: {
       colors: {
-        // Inverted scale: high numbers = light (page/card/input), low numbers = dark (text/borders)
-        // Components that used bg-stone-9xx get warm light surfaces; text-stone-4xx get warm readable ink
+        // Colors use space-separated RGB vars so Tailwind opacity modifiers work (bg-gold/20, etc.)
         stone: {
-          950: '#fdf8ef',  // page background — warm cream
-          900: '#ffffff',  // card / panel surface
-          800: '#faf4e8',  // input / alternate surface
-          700: '#ece0c4',  // section dividers, subtle borders
-          600: '#d4bc90',  // visible borders
-          500: '#9e8468',  // placeholder / icon text
-          400: '#78604a',  // secondary text
-          300: '#573c2c',  // body descriptions
-          200: '#3a2016',
-          100: '#24100c',
-          50:  '#160808',
+          950: 'rgb(var(--c-950) / <alpha-value>)',
+          900: 'rgb(var(--c-900) / <alpha-value>)',
+          800: 'rgb(var(--c-800) / <alpha-value>)',
+          700: 'rgb(var(--c-700) / <alpha-value>)',
+          600: 'rgb(var(--c-600) / <alpha-value>)',
+          500: 'rgb(var(--c-500) / <alpha-value>)',
+          400: 'rgb(var(--c-400) / <alpha-value>)',
+          300: 'rgb(var(--c-300) / <alpha-value>)',
+          200: 'rgb(var(--c-200) / <alpha-value>)',
+          100: 'rgb(var(--c-100) / <alpha-value>)',
+          50:  'rgb(var(--c-50)  / <alpha-value>)',
         },
-        parchment: '#1e000e',  // primary text — palette darkest, ink on parchment
-        ink:       '#0f0400',  // near-black — text on colored buttons
-        gold:      '#b8900a',  // amber — slightly darkened for light-bg contrast
-        crimson:   '#823038',  // burgundy — primary actions, completed steps
-        vivid:     '#4a6800',  // dark olive — positive modifiers, readable on light bg
+        parchment: 'rgb(var(--c-parchment) / <alpha-value>)',
+        ink:       'rgb(var(--c-ink)       / <alpha-value>)',
+        gold:      'rgb(var(--c-gold)      / <alpha-value>)',
+        crimson:   'rgb(var(--c-crimson)   / <alpha-value>)',
+        vivid:     'rgb(var(--c-vivid)     / <alpha-value>)',
       },
       fontFamily: {
         display: ['"MedievalSharp"', 'serif'],
@@ -40,11 +40,12 @@ export default {
         full: '9999px',
       },
       boxShadow: {
-        card:       '0 2px 12px -3px rgba(30,0,14,0.10), 0 1px 4px rgba(30,0,14,0.06)',
-        'card-hover':'0 6px 20px -4px rgba(30,0,14,0.16), 0 2px 6px rgba(30,0,14,0.08)',
-        stat:       '0 1px 6px rgba(30,0,14,0.08)',
-        btn:        '0 1px 3px rgba(30,0,14,0.14)',
-        input:      'inset 0 1px 3px rgba(30,0,14,0.05)',
+        // --shadow-rgb stays comma-separated because it's used in rgba(), not rgb()/<alpha-value>
+        card:        '0 2px 12px -3px rgba(var(--shadow-rgb), 0.10), 0 1px 4px rgba(var(--shadow-rgb), 0.06)',
+        'card-hover':'0 6px 20px -4px rgba(var(--shadow-rgb), 0.16), 0 2px 6px rgba(var(--shadow-rgb), 0.08)',
+        stat:        '0 1px 6px rgba(var(--shadow-rgb), 0.08)',
+        btn:         '0 1px 3px rgba(var(--shadow-rgb), 0.14)',
+        input:       'inset 0 1px 3px rgba(var(--shadow-rgb), 0.05)',
       },
     }
   },

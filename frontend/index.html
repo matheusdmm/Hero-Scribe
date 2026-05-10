@@ -53,6 +53,14 @@
         }
         </script>
 
+        <!-- Theme: apply before paint to avoid flash -->
+        <script>
+          (function () {
+            if (localStorage.getItem('theme') === 'dark')
+              document.documentElement.classList.add('dark');
+          })();
+        </script>
+
         <!-- Favicon -->
         <link rel="icon" href="/favicon.ico" />
 

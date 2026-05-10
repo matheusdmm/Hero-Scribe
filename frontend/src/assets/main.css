@@ -2,10 +2,56 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Light theme (default / parchment) ─────────────────────────────── */
+/* Values are space-separated R G B so Tailwind opacity modifiers work  */
+:root {
+  --c-950: 253 248 239;   /* #fdf8ef — page bg, warm cream */
+  --c-900: 255 255 255;   /* #ffffff — card surface */
+  --c-800: 250 244 232;   /* #faf4e8 — input surface */
+  --c-700: 236 224 196;   /* #ece0c4 — dividers */
+  --c-600: 212 188 144;   /* #d4bc90 — visible borders */
+  --c-500: 158 132 104;   /* #9e8468 — placeholder */
+  --c-400: 120 96 74;     /* #78604a — secondary text */
+  --c-300: 87 60 44;      /* #573c2c — body text */
+  --c-200: 58 32 22;      /* #3a2016 */
+  --c-100: 36 16 12;      /* #24100c */
+  --c-50:  22 8 8;        /* #160808 */
+  --c-parchment: 30 0 14; /* #1e000e — primary text */
+  --c-ink:       15 4 0;  /* #0f0400 */
+  --c-gold:      184 144 10; /* #b8900a */
+  --c-crimson:   130 48 56;  /* #823038 */
+  --c-vivid:     74 104 0;   /* #4a6800 */
+  --shadow-rgb: 30, 0, 14;  /* comma-separated for rgba() in box-shadow */
+}
+
+/* ── Dark theme (deep forest green & gold) ──────────────────────────── */
+/* html.dark has specificity (0,1,1) > :root's (0,1,0) — always wins   */
+html.dark {
+  --c-950: 12 26 14;      /* #0c1a0e — page bg, dark forest */
+  --c-900: 18 32 24;      /* #122018 — card surface */
+  --c-800: 23 43 29;      /* #172b1d — input surface */
+  --c-700: 30 56 38;      /* #1e3826 — dividers */
+  --c-600: 44 80 55;      /* #2c5037 — visible borders */
+  --c-500: 86 127 101;    /* #567f65 — placeholder */
+  --c-400: 116 171 134;   /* #74ab86 — secondary text */
+  --c-300: 160 200 173;   /* #a0c8ad — body text */
+  --c-200: 197 224 206;   /* #c5e0ce */
+  --c-100: 220 238 226;   /* #dceee2 */
+  --c-50:  235 245 239;   /* #ebf5ef */
+  --c-parchment: 236 245 239; /* #ecf5ef — primary text */
+  --c-ink:       12 26 14;    /* #0c1a0e */
+  --c-gold:      212 168 32;  /* #d4a820 — brighter for dark bg */
+  --c-crimson:   168 64 80;   /* #a84050 */
+  --c-vivid:     82 181 104;  /* #52b568 */
+  --shadow-rgb: 5, 20, 8;    /* comma-separated for rgba() in box-shadow */
+}
+
+/* ── Print ──────────────────────────────────────────────────────────── */
 @media print {
   @page { margin: 1cm; size: A4 portrait; }
 
-  html, body, .bg-stone-950, .bg-stone-800 { background-color: white !important; }
+  html, body,
+  .bg-stone-950, .bg-stone-900, .bg-stone-800 { background-color: white !important; }
 
   body {
     font-size: 8.5pt;
@@ -60,12 +106,12 @@
   .grid.grid-cols-3, .grid.grid-cols-2 { break-inside: avoid; }
 }
 
+/* ── Base ───────────────────────────────────────────────────────────── */
 @layer base {
   body {
     @apply bg-stone-950 text-parchment font-body antialiased;
   }
 
-  /* Global rounded inputs — components add sizing/color on top */
   input[type="text"],
   input[type="number"],
   select,
@@ -74,19 +120,29 @@
   }
 }
 
+/* ── Components ─────────────────────────────────────────────────────── */
+/* Hover/border opacity states written as plain CSS — @apply can't      */
+/* resolve opacity modifiers on CSS-variable colors in Tailwind v3.     */
 @layer components {
   .btn-primary {
     @apply bg-crimson text-white px-6 py-2.5 font-semibold tracking-wide
-           rounded-md shadow-btn hover:bg-crimson/90 active:scale-95
+           rounded-md shadow-btn active:scale-95
            transition-all duration-150 disabled:opacity-40 disabled:pointer-events-none;
+  }
+  .btn-primary:hover {
+    background-color: rgb(var(--c-crimson) / 0.9);
   }
   .btn-secondary {
     @apply bg-transparent text-gold px-6 py-2.5 font-semibold tracking-wide
-           border border-gold/60 rounded-md hover:bg-gold/10 active:scale-95
+           rounded-md active:scale-95
            transition-all duration-150 disabled:opacity-40 disabled:pointer-events-none;
+    border: 1px solid rgb(var(--c-gold) / 0.6);
+  }
+  .btn-secondary:hover {
+    background-color: rgb(var(--c-gold) / 0.1);
   }
   .card {
-    @apply bg-white rounded-2xl border border-stone-700 p-6 shadow-card;
+    @apply bg-stone-900 rounded-2xl border border-stone-700 p-6 shadow-card;
   }
   .section-title {
     @apply text-gold font-semibold text-xs tracking-widest uppercase mb-3;

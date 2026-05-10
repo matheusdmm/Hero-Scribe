@@ -24,7 +24,7 @@ export function useApi() {
 
   async function fetchSpells(className) {
     const name = className.charAt(0).toUpperCase() + className.slice(1)
-    let url = `${OPEN5E}/spells/?dnd_class=${name}&ordering=level_int,name&limit=100`
+    let url = `${OPEN5E}/v1/spells/?dnd_class=${name}&ordering=level_int,name&limit=100`
     const spells = []
     while (url) {
       const res = await fetch(url)

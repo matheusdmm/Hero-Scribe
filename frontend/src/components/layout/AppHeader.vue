@@ -22,23 +22,63 @@
             {{ savedCount }}
           </span>
         </RouterLink>
+
+        <!-- Theme toggle -->
+        <button
+          @click="toggleTheme"
+          :aria-label="theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'"
+          class="p-1.5 rounded-md text-stone-400 hover:text-parchment hover:bg-stone-800 transition-colors"
+        >
+          <!-- Sun (shown in dark mode) -->
+          <svg v-if="theme === 'dark'" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+          <!-- Moon (shown in light mode) -->
+          <svg v-else class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
+
         <RouterLink to="/create" class="btn-primary text-sm">New Character</RouterLink>
       </nav>
 
-      <!-- Mobile: hamburger -->
-      <button
-        class="sm:hidden p-2 -mr-2 text-stone-400 hover:text-parchment transition-colors"
-        @click="menuOpen = !menuOpen"
-        aria-label="Toggle menu"
-      >
+      <!-- Mobile: theme toggle + hamburger -->
+      <div class="sm:hidden flex items-center gap-1">
+        <button
+          @click="toggleTheme"
+          :aria-label="theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'"
+          class="p-2 text-stone-400 hover:text-parchment transition-colors"
+        >
+          <svg v-if="theme === 'dark'" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+          <svg v-else class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
+
+        <button
+          class="-mr-2 p-2 text-stone-400 hover:text-parchment transition-colors"
+          @click="menuOpen = !menuOpen"
+          aria-label="Toggle menu"
+        >
         <svg v-if="!menuOpen" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
         </svg>
         <svg v-else class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
         </svg>
-      </button>
-    </div>
+        </button>
+      </div><!-- /mobile buttons -->
+    </div><!-- /main bar -->
 
     <!-- Mobile dropdown -->
     <Transition name="slide">
@@ -71,6 +111,7 @@
 import { ref, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useCharacterStore } from '@/stores/character.js'
+import { useTheme } from '@/composables/useTheme.js'
 
 const store = useCharacterStore()
 const savedCount = computed(() => store.savedCharacters.length)
@@ -80,6 +121,8 @@ const route = useRoute()
 
 function close() { menuOpen.value = false }
 watch(() => route.path, close)
+
+const { theme, toggle: toggleTheme } = useTheme()
 </script>
 
 <style scoped>
