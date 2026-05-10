@@ -10,16 +10,7 @@
       </div>
 
       <!-- Floating icon -->
-      <div class="hero-icon relative z-10 mb-8 text-gold w-20 h-20 mx-auto">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" class="w-full h-full">
-          <path d="M14.5 17.5L3 6V3h3l11.5 11.5"/>
-          <path d="M13 19l6-6"/>
-          <path d="M16 16l4 4"/>
-          <path d="M19 21l2-2"/>
-          <path d="M9.5 6.5L5 11"/>
-          <path d="M3 3l3 3"/>
-        </svg>
-      </div>
+      <div class="hero-icon relative z-10 inline-block text-7xl mb-8 text-gold">⚔</div>
 
       <!-- Headline -->
       <h1 class="anim anim-1 font-body text-5xl sm:text-6xl font-semibold text-parchment mb-5 tracking-wide leading-snug">
@@ -126,7 +117,7 @@
       <!-- Also by the author -->
       <div class="also mt-10 flex flex-col sm:flex-row items-center justify-between gap-4 px-5 py-4 border border-stone-700 rounded-xl bg-stone-800/40">
         <div>
-          <p class="text-[10px] text-stone-500 uppercase tracking-widest mb-1">Also by the author</p>
+          <p class="text-[10px] text-stone-500 uppercase tracking-widest mb-1">Other tools</p>
           <p class="text-parchment font-semibold text-sm">Tome of Changes</p>
           <p class="text-stone-400 text-xs mt-0.5">Side-by-side comparison of every rule change between D&D 5e and 5.5e (2024).</p>
         </div>
@@ -136,7 +127,7 @@
           rel="noopener"
           class="shrink-0 btn-secondary text-sm !px-5 !py-2"
         >
-          Visit ↗
+          Visit
         </a>
       </div>
 

@@ -51,14 +51,14 @@
                             target="_blank"
                             rel="noopener"
                             class="text-stone-400 hover:text-parchment transition-colors"
-                            >Tome of Changes ↗</a
+                            >Tome of Changes</a
                         >
                         <a
                             href="https://matheusdmm.dev"
                             target="_blank"
                             rel="noopener"
                             class="text-stone-400 hover:text-parchment transition-colors"
-                            >matheusdmm.dev ↗</a
+                            >matheusdmm.dev</a
                         >
                     </div>
                     <div class="flex flex-col gap-2.5">
@@ -72,14 +72,14 @@
                             target="_blank"
                             rel="noopener"
                             class="text-stone-400 hover:text-parchment transition-colors"
-                            >Open5e API ↗</a
+                            >Open5e API</a
                         >
                         <a
                             href="https://dnd.wizards.com/resources/systems-reference-document"
                             target="_blank"
                             rel="noopener"
                             class="text-stone-400 hover:text-parchment transition-colors"
-                            >SRD (WotC) ↗</a
+                            >SRD (WotC)</a
                         >
                     </div>
                 </nav>
