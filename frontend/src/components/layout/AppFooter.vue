@@ -44,15 +44,29 @@
                         <p
                             class="text-[10px] text-stone-500 uppercase tracking-widest mb-1"
                         >
-                            Resources
+                            Also by Matheus
                         </p>
+                        <a
+                            href="https://www.tomeofchanges.com/"
+                            target="_blank"
+                            rel="noopener"
+                            class="text-stone-400 hover:text-parchment transition-colors"
+                            >Tome of Changes ↗</a
+                        >
                         <a
                             href="https://matheusdmm.dev"
                             target="_blank"
                             rel="noopener"
                             class="text-stone-400 hover:text-parchment transition-colors"
-                            >Matheusdmm.dev ↗</a
+                            >matheusdmm.dev ↗</a
                         >
+                    </div>
+                    <div class="flex flex-col gap-2.5">
+                        <p
+                            class="text-[10px] text-stone-500 uppercase tracking-widest mb-1"
+                        >
+                            Resources
+                        </p>
                         <a
                             href="https://api.open5e.com"
                             target="_blank"

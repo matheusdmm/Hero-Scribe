@@ -92,6 +92,24 @@
         </div>
 
       </div>
+
+      <!-- Also by the author -->
+      <div class="also mt-10 flex flex-col sm:flex-row items-center justify-between gap-4 px-5 py-4 border border-stone-700 rounded-xl bg-stone-800/40">
+        <div>
+          <p class="text-[10px] text-stone-500 uppercase tracking-widest mb-1">Also by the author</p>
+          <p class="text-parchment font-semibold text-sm">Tome of Changes</p>
+          <p class="text-stone-400 text-xs mt-0.5">Side-by-side comparison of every rule change between D&D 5e and 5.5e (2024).</p>
+        </div>
+        <a
+          href="https://www.tomeofchanges.com/"
+          target="_blank"
+          rel="noopener"
+          class="shrink-0 btn-secondary text-sm !px-5 !py-2"
+        >
+          Visit ↗
+        </a>
+      </div>
+
     </section>
 
   </div>
@@ -162,6 +180,12 @@
 .feat-2 { animation-delay: 0.65s; }
 .feat-3 { animation-delay: 0.75s; }
 .feat-4 { animation-delay: 0.85s; }
+
+.also {
+  opacity: 0;
+  animation: fadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: 0.95s;
+}
 
 .feat:hover {
   transform: translateY(-3px);
