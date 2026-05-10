@@ -2,9 +2,9 @@
   "buildCommand": "cd frontend && npm install && npm run build",
   "outputDirectory": "frontend/dist",
   "functions": {
-    "api/calculate.go": {},
-    "api/classes.go": {},
-    "api/races.go": {}
+    "api/calculate.go": { "maxDuration": 10 },
+    "api/classes.go": { "maxDuration": 10 },
+    "api/races.go": { "maxDuration": 10 }
   },
   "rewrites": [
     { "source": "/api/classes", "destination": "/api/classes.go" },
