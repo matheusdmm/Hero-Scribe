@@ -3,24 +3,73 @@
 @tailwind utilities;
 
 @media print {
-  @page { margin: 1cm; size: A4 landscape; }
+  @page {
+    margin: 0.7cm;
+    size: A4 portrait;
+  }
 
-  body { background: #fff !important; }
+  body {
+    background: white !important;
+    font-size: 9pt;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
 
   .no-print { display: none !important; }
 
-  /* Flatten cards for print — no shadows, thin border */
+  /* Remove container constraints */
+  .max-w-7xl { max-width: none !important; padding: 0 !important; margin: 0 !important; }
+
+  /* Flat, compact cards */
   .card {
     box-shadow: none !important;
-    border: 1px solid #d4bc90 !important;
+    border: 0.75px solid #c8a860 !important;
+    border-radius: 4px !important;
+    padding: 5px 7px !important;
     break-inside: avoid;
   }
 
-  /* Force the 3-column grid even on print */
-  .lg\:col-span-3 { grid-column: span 3 / span 3; }
-  .lg\:col-span-5 { grid-column: span 5 / span 5; }
-  .lg\:col-span-4 { grid-column: span 4 / span 4; }
-  .lg\:grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+  .section-title { font-size: 7pt !important; margin-bottom: 3px !important; }
+
+  /* ── Force 3-column grid at portrait width ──
+     lg:grid-cols-12 normally activates at 1024px; A4 portrait is ~794px so the
+     breakpoint never fires. We override the grid and remap each span to a fixed column. */
+  .lg\:grid-cols-12 {
+    display: grid !important;
+    grid-template-columns: 25% 40% 34% !important;
+    gap: 4px !important;
+  }
+  .lg\:col-span-3 { grid-column: 1 / 2 !important; }
+  .lg\:col-span-5 { grid-column: 2 / 3 !important; }
+  .lg\:col-span-4 { grid-column: 3 / 4 !important; }
+
+  /* Tighten all spacing */
+  .space-y-5 > * + *,
+  .space-y-4 > * + * { margin-top: 4px !important; }
+  .space-y-3 > * + * { margin-top: 3px !important; }
+  .space-y-2 > * + * { margin-top: 2px !important; }
+  .space-y-1\.5 > * + * { margin-top: 1px !important; }
+  .space-y-1 > * + * { margin-top: 1px !important; }
+  .gap-4, .gap-3 { gap: 4px !important; }
+  .gap-2 { gap: 2px !important; }
+  .py-3, .py-4 { padding-top: 3px !important; padding-bottom: 3px !important; }
+  .mt-2 { margin-top: 2px !important; }
+  .mt-1 { margin-top: 1px !important; }
+
+  /* Shrink type scale */
+  .text-4xl { font-size: 16pt !important; line-height: 1.1 !important; }
+  .text-3xl { font-size: 13pt !important; line-height: 1.1 !important; }
+  .text-2xl { font-size: 10pt !important; line-height: 1.2 !important; }
+  .text-xl  { font-size: 9pt  !important; }
+  .text-sm  { font-size: 8pt  !important; }
+  .text-xs  { font-size: 7pt  !important; }
+
+  /* Display the 18-skill list in 2 columns so it doesn't dominate the left column */
+  .skills-print-list {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    column-gap: 6px !important;
+  }
 }
 
 @layer base {

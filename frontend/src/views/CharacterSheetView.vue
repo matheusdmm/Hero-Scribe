@@ -93,7 +93,7 @@
           <!-- Skills -->
           <div class="card !p-4">
             <h2 class="section-title">Skills</h2>
-            <ul class="space-y-1">
+            <ul class="space-y-1 skills-print-list">
               <li v-for="skill in skills" :key="skill.name" class="flex items-center gap-1.5 text-xs">
                 <span
                   class="w-2.5 h-2.5 rounded-full border-2 shrink-0"
