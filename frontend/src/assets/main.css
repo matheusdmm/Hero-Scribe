@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@media print {
+  @page { margin: 1cm; size: A4 landscape; }
+
+  body { background: #fff !important; }
+
+  .no-print { display: none !important; }
+
+  /* Flatten cards for print — no shadows, thin border */
+  .card {
+    box-shadow: none !important;
+    border: 1px solid #d4bc90 !important;
+    break-inside: avoid;
+  }
+
+  /* Force the 3-column grid even on print */
+  .lg\:col-span-3 { grid-column: span 3 / span 3; }
+  .lg\:col-span-5 { grid-column: span 5 / span 5; }
+  .lg\:col-span-4 { grid-column: span 4 / span 4; }
+  .lg\:grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+}
+
+@layer base {
+  body {
+    @apply bg-stone-950 text-parchment font-body antialiased;
+  }
+
+  /* Global rounded inputs — components add sizing/color on top */
+  input[type="text"],
+  input[type="number"],
+  select,
+  textarea {
+    @apply rounded-md;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-crimson text-white px-6 py-2.5 font-semibold tracking-wide
+           rounded-md shadow-btn hover:bg-crimson/90 active:scale-95
+           transition-all duration-150 disabled:opacity-40 disabled:pointer-events-none;
+  }
+  .btn-secondary {
+    @apply bg-transparent text-gold px-6 py-2.5 font-semibold tracking-wide
+           border border-gold/60 rounded-md hover:bg-gold/10 active:scale-95
+           transition-all duration-150 disabled:opacity-40 disabled:pointer-events-none;
+  }
+  .card {
+    @apply bg-white rounded-2xl border border-stone-700 p-6 shadow-card;
+  }
+  .section-title {
+    @apply text-gold font-semibold text-xs tracking-widest uppercase mb-3;
+  }
+}

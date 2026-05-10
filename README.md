@@ -1,22 +1,81 @@
-# Ficha-rpg
+# D&D Character Creator
 
-Um aplicativo de criação de ficha de personagem, rolagem de dados D20 e consulta de habilidades em React com animações em 3D utilizando Three.js. Este projeto permite aos usuários criar personagens de RPG, rolar dados e exibir resultados de forma interativa e visual.
+Stack: **Go** (Vercel Serverless) · **Vue 3** · **Tailwind CSS** · **Pinia**
 
-## Tecnologias Utilizadas
+## Project Structure
 
-- **React**: Biblioteca JavaScript para construir interfaces de usuário.
-- **Three.js**: Biblioteca JavaScript para criar gráficos 3D no navegador.
-- **TypeScript**: Superset do JavaScript que adiciona tipagem estática.
-- **Tailwind CSS**: Framework CSS para estilização moderna e responsiva.
-- **Daisy UI**: Css Toolkit.
-- **React Select**: Para listas de multipla seleção.
-- **D&D 5E API**: Para consulta de classes e habilidades.
-- **Deep AI**: Para os avatares dos personagens.
+```
+dnd-character-creator/
+├── vercel.json               # Build & rewrite config
+├── api/                      # Go serverless functions
+│   ├── go.mod
+│   ├── classes.go            # GET /api/classes
+│   ├── races.go              # GET /api/races
+│   ├── calculate.go          # POST /api/calculate
+│   └── data/
+│       └── data.go           # Races, classes, structs (SRD data)
+└── frontend/                 # Vue 3 app
+    ├── index.html
+    ├── package.json
+    ├── vite.config.js
+    ├── tailwind.config.js
+    ├── postcss.config.js
+    └── src/
+        ├── main.js
+        ├── App.vue
+        ├── router/
+        │   └── index.js
+        ├── stores/
+        │   └── character.js       # Pinia store (draft, races, classes, sheet)
+        ├── composables/
+        │   ├── useApi.js          # fetch wrappers for Go API
+        │   └── useAbilityScores.js # modifier, point buy, standard array logic
+        ├── types/
+        │   └── index.js           # JSDoc types, constants (alignments, backgrounds)
+        ├── assets/
+        │   └── main.css           # Tailwind + custom component classes
+        ├── views/
+        │   ├── HomeView.vue
+        │   ├── CharacterCreatorView.vue  # Multi-step wizard
+        │   └── CharacterSheetView.vue    # Final character sheet + JSON export
+        └── components/
+            ├── layout/
+            │   └── AppHeader.vue
+            ├── ui/
+            │   ├── BaseCard.vue          # Selectable card
+            │   ├── AbilityScoreInput.vue # Score input with modifier display
+            │   ├── StatBox.vue           # Stat display box
+            │   └── StepIndicator.vue     # Wizard progress bar
+            └── character/
+                ├── RaceSelector.vue      # Race grid with edition filter
+                ├── ClassSelector.vue     # Class grid with details panel
+                ├── AbilitiesStep.vue     # Manual / standard array / point buy
+                └── DetailsStep.vue      # Name, level, background, alignment
+```
 
-## Funcionalidades
+## Local Development
 
-- Criação de personagens com nome e atributos.
-- Rolagem de dados D4, D6, D10 e D20 com animações 3D.
-- Exibição do resultado da rolagem diretamente na face do dado.
-- Seção para escolher o avatar do personagem.
-- Interface moderna e responsiva.
+```bash
+# Frontend
+cd frontend
+npm install
+npm run dev        # runs on :5173, proxies /api → :3000
+
+# Go API (local via vercel dev)
+npm i -g vercel
+vercel dev         # runs everything on :3000
+```
+
+## Deploy
+
+```bash
+vercel
+```
+
+## Next Steps
+
+- [ ] Skill proficiency selection (based on class + background)
+- [ ] Spell list per class/level
+- [ ] Supabase integration to save characters
+- [ ] PDF export (character sheet printable)
+- [ ] 5.5e-specific features (species, background ASI flexibility)
