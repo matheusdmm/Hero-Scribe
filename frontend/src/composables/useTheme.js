@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 
 const theme = ref(
-  typeof localStorage !== 'undefined' ? (localStorage.getItem('theme') ?? 'light') : 'light'
+  typeof localStorage !== 'undefined' ? (localStorage.getItem('theme') ?? 'dark') : 'dark'
 )
 
 function applyTheme(t) {
