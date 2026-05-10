@@ -109,3 +109,4 @@ Uses `window.print()` with a custom `@media print` block in `main.css`. The prin
 - Point buy uses a non-linear cost table (scores 8–15, cost 0–9 points) in `useAbilityScores.js`.
 - Spell slots are computed client-side via `getSpellSlots(className, level)` in `types/index.js` using SRD tables for full casters, half casters, and warlock pact magic.
 - Tailwind's stone color scale is **inverted**: `stone-950` = `#fdf8ef` (cream page background), not dark.
+- Never use hardcoded `bg-white` — use theme-aware classes like `bg-stone-900` so both light and dark themes resolve correctly via the CSS variable palette in `main.css`.

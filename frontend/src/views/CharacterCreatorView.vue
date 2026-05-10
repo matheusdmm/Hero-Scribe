@@ -5,7 +5,7 @@
     <div v-if="store.loading" class="text-center py-20 text-stone-400">Loading...</div>
     <div v-else-if="store.error" class="text-center py-10 text-red-500">{{ store.error }}</div>
 
-    <div v-else class="bg-white rounded-2xl border border-stone-700 p-8 shadow-card">
+    <div v-else class="bg-stone-900 rounded-2xl border border-stone-700 p-8 shadow-card">
       <DetailsStep   v-if="store.currentStep === 0" v-model="store.draft" />
       <RaceSelector  v-else-if="store.currentStep === 1" :races="store.races" v-model:selected="store.draft.race" />
       <ClassSelector v-else-if="store.currentStep === 2" :classes="store.classes" v-model:selected="store.draft.class" />
