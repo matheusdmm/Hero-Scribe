@@ -43,6 +43,36 @@ export interface DnDClass {
   weapon_proficiencies: string[]
 }
 
+export interface SelectedSpell {
+  slug: string
+  name: string
+  level: number
+  school: string
+  casting_time: string
+  range: string
+  components: string
+}
+
+export interface Spell {
+  slug: string
+  name: string
+  level_int: number
+  school: string
+  casting_time: string
+  range: string
+  components: string
+  extended?: boolean
+  book?: string
+}
+
+export interface CharacterInput {
+  race: string
+  class: string
+  level: number
+  abilities: AbilityScores
+  background: string
+}
+
 export interface CharacterDraft {
   name: string
   race: string
@@ -59,7 +89,7 @@ export interface CharacterDraft {
   languages: string[]
   equipment: string[]
   weapons: string[]
-  spells: string[]
+  spells: SelectedSpell[]
   trait: string
   ideal: string
   bond: string
@@ -74,6 +104,13 @@ export interface CharacterSheet {
   armor_class: number
   initiative: number
   proficiency_bonus: number
+}
+
+export interface SavedEntry {
+  id: string
+  savedAt: string
+  draft: CharacterDraft
+  sheet: CharacterSheet | null
 }
 
 export interface Weapon {

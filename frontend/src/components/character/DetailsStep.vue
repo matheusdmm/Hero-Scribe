@@ -121,7 +121,7 @@
 <script setup>
 import { ref } from 'vue'
 import { BACKGROUNDS, ALIGNMENTS } from '@/types'
-import { useExtendedData } from '@/composables/useExtendedData.js'
+import { useExtendedData } from '@/composables/useExtendedData'
 import ExtendedToggle from '@/components/ui/ExtendedToggle.vue'
 
 const props = defineProps({

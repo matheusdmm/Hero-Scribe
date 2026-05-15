@@ -74,7 +74,7 @@
 import { ref, computed, reactive } from 'vue'
 import AbilityScoreInput from '@/components/ui/AbilityScoreInput.vue'
 import { ABILITY_NAMES, ABILITY_LABELS } from '@/types'
-import { useAbilityScores } from '@/composables/useAbilityScores.js'
+import { useAbilityScores } from '@/composables/useAbilityScores'
 
 const props = defineProps({
   modelValue: { type: Object, required: true },

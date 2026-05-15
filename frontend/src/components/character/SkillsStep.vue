@@ -65,9 +65,9 @@
 
 <script setup>
 import { computed, onMounted } from 'vue'
-import { useCharacterStore } from '@/stores/character.js'
+import { useCharacterStore } from '@/stores/character'
 import { SKILL_MAP, ABILITY_LABELS } from '@/types'
-import { modifier, formatMod } from '@/composables/useAbilityScores.js'
+import { modifier, formatMod } from '@/composables/useAbilityScores'
 
 const props = defineProps({
   modelValue: { type: Object, required: true },

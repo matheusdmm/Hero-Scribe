@@ -22,7 +22,7 @@
 
 <script setup>
 import { computed } from 'vue'
-import { modifier, formatMod } from '@/composables/useAbilityScores.js'
+import { modifier, formatMod } from '@/composables/useAbilityScores'
 
 const props = defineProps({
   modelValue: { type: Number, required: true },

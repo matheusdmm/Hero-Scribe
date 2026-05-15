@@ -100,8 +100,8 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
 import { SPELLCASTING_CLASSES, SPELLCASTING_ABILITY, getSpellSlots, SPELL_LEVEL_LABELS } from '@/types'
-import { useCharacterStore } from '@/stores/character.js'
-import { getExtendedSpells } from '@/composables/useExtendedData.js'
+import { useCharacterStore } from '@/stores/character'
+import { getExtendedSpells } from '@/composables/useExtendedData'
 import ExtendedToggle from '@/components/ui/ExtendedToggle.vue'
 import LoadingSpinner from '@/components/ui/LoadingSpinner.vue'
 

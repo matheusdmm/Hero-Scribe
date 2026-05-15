@@ -1,4 +1,5 @@
-export type { AbilityName, Edition, WeaponCategory, AbilityScores, Trait, AbilityBonus, Race, DnDClass, CharacterDraft, CharacterSheet, Weapon, SkillEntry, GoldRoll } from './models'
+export type { AbilityName, Edition, WeaponCategory, AbilityScores, Trait, AbilityBonus, Race, DnDClass, CharacterDraft, CharacterSheet, CharacterInput, SelectedSpell, Spell, SavedEntry, Weapon, SkillEntry, GoldRoll } from './models'
+export type { CategoryKey, RawEntry, ExtendedSpell, ExtendedItem } from './extended'
 import type { AbilityName, Weapon, SkillEntry, GoldRoll } from './models'
 
 export const ABILITY_NAMES: AbilityName[] = ['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma']

@@ -214,8 +214,8 @@ import {
   CLASS_GOLD_ROLLS, CLASS_STARTING_EQUIPMENT,
   WEAPONS, isProficientWith,
 } from '@/types'
-import { useCharacterStore } from '@/stores/character.js'
-import { getExtendedItems } from '@/composables/useExtendedData.js'
+import { useCharacterStore } from '@/stores/character'
+import { getExtendedItems } from '@/composables/useExtendedData'
 
 const props = defineProps({
   modelValue: { type: Object, required: true },
