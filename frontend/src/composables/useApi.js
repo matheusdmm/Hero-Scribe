@@ -2,21 +2,28 @@
 const BASE = '/api'
 const OPEN5E = 'https://api.open5e.com'
 
+function fetchWithTimeout(url, options = {}, ms = 8000) {
+  const controller = new AbortController()
+  const id = setTimeout(() => controller.abort(), ms)
+  return fetch(url, { ...options, signal: controller.signal })
+    .finally(() => clearTimeout(id))
+}
+
 export function useApi() {
   async function fetchRaces() {
-    const res = await fetch(`${BASE}/races`)
+    const res = await fetchWithTimeout(`${BASE}/races`)
     if (!res.ok) throw new Error(`Failed to fetch races: ${res.status}`)
     return res.json()
   }
 
   async function fetchClasses() {
-    const res = await fetch(`${BASE}/classes`)
+    const res = await fetchWithTimeout(`${BASE}/classes`)
     if (!res.ok) throw new Error(`Failed to fetch classes: ${res.status}`)
     return res.json()
   }
 
   async function calculateSheet(characterInput) {
-    const res = await fetch(`${BASE}/calculate`, {
+    const res = await fetchWithTimeout(`${BASE}/calculate`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(characterInput),
@@ -26,8 +33,14 @@ export function useApi() {
   }
 
   async function fetchSpells(className) {
-    const name = className.charAt(0).toUpperCase() + className.slice(1)
-    let url = `${OPEN5E}/v1/spells/?dnd_class=${name}&ordering=level_int,name&limit=100`
+    const cls = className.toLowerCase()
+    // Open5e's spell_lists field only covers full casters — paladin and ranger
+    // are not valid choices there, so fall back to dnd_class for them.
+    const SPELL_LIST_CLASSES = new Set(['bard', 'cleric', 'druid', 'sorcerer', 'warlock', 'wizard'])
+    const filter = SPELL_LIST_CLASSES.has(cls)
+      ? `spell_lists=${cls}`
+      : `dnd_class=${cls.charAt(0).toUpperCase() + cls.slice(1)}`
+    let url = `${OPEN5E}/v1/spells/?${filter}&ordering=level_int,name&limit=100`
     const spells = []
     let pages = 0
     const MAX_PAGES = 20

@@ -63,11 +63,14 @@
           <span
             v-for="lang in modelValue.languages"
             :key="lang"
-            class="flex items-center gap-1.5 px-3 py-1 bg-stone-800 border border-stone-600
-                   text-parchment text-sm rounded-full"
+            class="flex items-center gap-1.5 px-3 py-1 bg-stone-800 border text-sm rounded-full"
+            :class="lang === 'Common'
+              ? 'border-stone-600 text-stone-400'
+              : 'border-stone-600 text-parchment'"
           >
             {{ lang }}
             <button
+              v-if="lang !== 'Common'"
               @click="removeLanguage(lang)"
               class="text-stone-500 hover:text-red-500 transition-colors leading-none"
             >×</button>
@@ -128,6 +131,54 @@
             Add
           </button>
         </div>
+
+        <!-- Extended items browser -->
+        <div class="mt-3">
+          <ExtendedToggle
+            :model-value="extItemsOn"
+            :loading="extItemsLoading"
+            label="Browse extended items (WotC)"
+            @update:model-value="toggleExtItems"
+          />
+
+          <div v-if="extItemsOn" class="mt-2">
+            <input
+              v-model="extItemSearch"
+              type="text"
+              placeholder="Search WotC items…"
+              class="w-full bg-stone-800 border border-stone-600 text-parchment px-3 py-2
+                     focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20
+                     placeholder-stone-500 rounded-md shadow-input text-sm transition-shadow"
+            />
+            <ul
+              v-if="filteredExtItems.length"
+              class="mt-1 max-h-64 overflow-y-auto rounded-md border border-stone-700 divide-y divide-stone-800 bg-stone-900 shadow-xl"
+            >
+              <li
+                v-for="item in filteredExtItems"
+                :key="item.name"
+                @mousedown.prevent="addExtItem(item)"
+                class="px-3 py-2.5 cursor-pointer transition-colors hover:bg-stone-800 hover:text-parchment text-stone-300"
+              >
+                <div class="text-sm font-medium leading-tight">{{ item.name }}</div>
+                <div class="flex flex-wrap gap-x-2 mt-0.5">
+                  <span v-if="item.damage && item.damageType" class="text-xs text-gold/80">
+                    {{ item.damage }} {{ item.damageType }}
+                  </span>
+                  <span v-else-if="item.armorClass" class="text-xs text-gold/80">
+                    AC {{ item.armorClass }}<span v-if="item.armorType"> · {{ item.armorType }}</span>
+                  </span>
+                  <span v-if="item.weaponProps" class="text-xs text-stone-500">{{ item.weaponProps }}</span>
+                  <span v-if="item.cost" class="text-xs text-stone-500">{{ item.cost }}</span>
+                  <span v-if="!item.damage && !item.armorClass && !item.cost && item.category" class="text-xs text-stone-500">{{ item.category }}</span>
+                </div>
+              </li>
+            </ul>
+            <p v-else-if="extItemSearch.trim()" class="mt-1 text-xs text-stone-500">
+              No items match "{{ extItemSearch }}"
+            </p>
+          </div>
+        </div>
       </section>
 
       <!-- Personality -->
@@ -157,12 +208,14 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import ExtendedToggle from '@/components/ui/ExtendedToggle.vue'
 import {
   ALL_LANGUAGES, RACE_LANGUAGES,
   CLASS_GOLD_ROLLS, CLASS_STARTING_EQUIPMENT,
   WEAPONS, isProficientWith,
 } from '@/types/index.js'
 import { useCharacterStore } from '@/stores/character.js'
+import { getExtendedItems } from '@/composables/useExtendedData.js'
 
 const props = defineProps({
   modelValue: { type: Object, required: true },
@@ -186,8 +239,13 @@ function toggleWeapon(id) {
 }
 
 onMounted(() => {
-  if (!props.modelValue.languages.length) {
-    update('languages', RACE_LANGUAGES[props.modelValue.race] ?? ['Common'])
+  const langs = props.modelValue.languages.length
+    ? props.modelValue.languages
+    : (RACE_LANGUAGES[props.modelValue.race] ?? ['Common'])
+  if (!langs.includes('Common')) {
+    update('languages', ['Common', ...langs])
+  } else if (!props.modelValue.languages.length) {
+    update('languages', langs)
   }
   if (!props.modelValue.equipment.length) {
     update('equipment', CLASS_STARTING_EQUIPMENT[props.modelValue.class] ?? [])
@@ -231,6 +289,42 @@ function addItem() {
 function removeItem(i) {
   update('equipment', props.modelValue.equipment.filter((_, idx) => idx !== i))
 }
+
+// Extended items
+const extItemsOn      = ref(localStorage.getItem('hs_ext_items') === '1')
+const extItemsLoading = ref(false)
+const extItemSearch   = ref('')
+const allExtItems     = ref([])
+
+const filteredExtItems = computed(() => {
+  const q = extItemSearch.value.toLowerCase().trim()
+  if (!q) return []
+  return allExtItems.value.filter(item => item.name.toLowerCase().includes(q)).slice(0, 40)
+})
+
+async function loadExtItems() {
+  if (allExtItems.value.length > 0) return
+  extItemsLoading.value = true
+  try { allExtItems.value = await getExtendedItems() } catch {}
+  extItemsLoading.value = false
+}
+
+async function toggleExtItems() {
+  extItemsOn.value = !extItemsOn.value
+  localStorage.setItem('hs_ext_items', extItemsOn.value ? '1' : '0')
+  if (extItemsOn.value) await loadExtItems()
+  if (!extItemsOn.value) extItemSearch.value = ''
+}
+
+function addExtItem(item) {
+  if (!item) return
+  if (!props.modelValue.equipment.includes(item.name)) {
+    update('equipment', [...props.modelValue.equipment, item.name])
+  }
+  extItemSearch.value = ''
+}
+
+if (extItemsOn.value) loadExtItems()
 
 const personalityFields = [
   { key: 'trait', label: 'Personality Trait', placeholder: 'How does your character behave?' },

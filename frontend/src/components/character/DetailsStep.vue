@@ -49,7 +49,15 @@
 
       <!-- Background -->
       <div>
-        <label class="block text-sm text-stone-400 mb-1">Background</label>
+        <div class="flex items-center justify-between mb-1">
+          <label class="text-sm text-stone-400">Background</label>
+          <ExtendedToggle
+            :model-value="extendedOn"
+            :loading="extLoading"
+            label="Extended content"
+            @update:model-value="toggleExtended"
+          />
+        </div>
         <select
           :value="modelValue.background"
           @change="update('background', $event.target.value)"
@@ -58,8 +66,17 @@
                  rounded-md shadow-input transition-shadow"
         >
           <option value="">Select background...</option>
-          <option v-for="bg in BACKGROUNDS" :key="bg" :value="bg">{{ bg }}</option>
+          <optgroup v-if="extendedOn" label="Core (SRD)">
+            <option v-for="bg in BACKGROUNDS" :key="bg" :value="bg">{{ bg }}</option>
+          </optgroup>
+          <template v-else>
+            <option v-for="bg in BACKGROUNDS" :key="bg" :value="bg">{{ bg }}</option>
+          </template>
+          <optgroup v-if="extendedOn && extBackgrounds.length" label="Extended (WotC official)">
+            <option v-for="bg in extBackgrounds" :key="bg" :value="bg">{{ bg }}</option>
+          </optgroup>
         </select>
+        <p v-if="extError" class="text-xs text-crimson mt-1">{{ extError }}</p>
       </div>
 
       <!-- Alignment -->
@@ -102,7 +119,10 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import { BACKGROUNDS, ALIGNMENTS } from '@/types/index.js'
+import { useExtendedData } from '@/composables/useExtendedData.js'
+import ExtendedToggle from '@/components/ui/ExtendedToggle.vue'
 
 const props = defineProps({
   modelValue: { type: Object, required: true },
@@ -112,4 +132,33 @@ const emit = defineEmits(['update:modelValue'])
 function update(field, value) {
   emit('update:modelValue', { ...props.modelValue, [field]: value })
 }
+
+const extendedOn    = ref(localStorage.getItem('hs_ext_backgrounds') === '1')
+const extBackgrounds = ref([])
+const extLoading    = ref(false)
+const extError      = ref(null)
+
+const { entries, loading, error, load } = useExtendedData()
+
+async function fetchExtended() {
+  if (extBackgrounds.value.length > 0) return
+  extLoading.value = true
+  extError.value = null
+  await load('backgrounds')
+  extLoading.value = false
+  extError.value = error.value
+  const coreSet = new Set(BACKGROUNDS)
+  extBackgrounds.value = entries.value
+    .map(e => e.name)
+    .filter(n => !coreSet.has(n))
+    .sort()
+}
+
+async function toggleExtended() {
+  extendedOn.value = !extendedOn.value
+  localStorage.setItem('hs_ext_backgrounds', extendedOn.value ? '1' : '0')
+  if (extendedOn.value) await fetchExtended()
+}
+
+if (extendedOn.value) fetchExtended()
 </script>

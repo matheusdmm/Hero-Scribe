@@ -10,8 +10,9 @@
     </div>
 
     <!-- Loading -->
-    <div v-else-if="store.spellsLoading" class="text-center py-16 text-stone-400">
-      Loading spells…
+    <div v-else-if="store.spellsLoading" class="flex items-center justify-center py-16 text-stone-500 gap-3" aria-live="polite">
+      <LoadingSpinner class="w-5 h-5" />
+      <span class="text-sm">Loading spells…</span>
     </div>
 
     <!-- No spells available at this level -->
@@ -32,6 +33,13 @@
         <span class="text-stone-400">
           Selected: <strong class="text-gold">{{ selectedCount }}</strong>
         </span>
+        <span class="text-stone-600">·</span>
+        <ExtendedToggle
+          :model-value="extendedOn"
+          :loading="extLoading"
+          label="Extended content"
+          @update:model-value="toggleExtended"
+        />
       </div>
 
       <!-- Search + level tabs -->
@@ -82,6 +90,7 @@
             {{ SPELL_LEVEL_LABELS[spell.level_int] }} · {{ spell.school }}
           </div>
           <div class="text-xs opacity-40 mt-0.5">{{ spell.casting_time }}</div>
+          <div v-if="spell.extended" class="text-xs text-gold/50 mt-0.5 truncate">{{ spell.book }}</div>
         </button>
       </div>
     </div>
@@ -90,8 +99,11 @@
 
 <script setup>
 import { ref, computed, watch } from 'vue'
-import { SPELLCASTING_CLASSES, SPELLCASTING_ABILITY, getSpellSlots, SPELL_SPELL_LEVEL_LABELS } from '@/types/index.js'
+import { SPELLCASTING_CLASSES, SPELLCASTING_ABILITY, getSpellSlots, SPELL_LEVEL_LABELS } from '@/types/index.js'
 import { useCharacterStore } from '@/stores/character.js'
+import { getExtendedSpells } from '@/composables/useExtendedData.js'
+import ExtendedToggle from '@/components/ui/ExtendedToggle.vue'
+import LoadingSpinner from '@/components/ui/LoadingSpinner.vue'
 
 const props = defineProps({
   modelValue: { type: Object, required: true },
@@ -114,9 +126,39 @@ const maxSpellLevel = computed(() => {
   return 0
 })
 
-const accessibleSpells = computed(() =>
-  store.availableSpells.filter(s => s.level_int === 0 || s.level_int <= maxSpellLevel.value)
-)
+// Extended spells
+const extendedOn      = ref(localStorage.getItem('hs_ext_spells') === '1')
+const extSpells       = ref([])
+const extLoading      = ref(false)
+
+async function loadExtended(className) {
+  if (!className || !extendedOn.value) return
+  extLoading.value = true
+  try {
+    const raw = await getExtendedSpells(className)
+    // dedup against Open5e spells by normalised name
+    const existingNames = new Set(store.availableSpells.map(s => s.name.toLowerCase()))
+    extSpells.value = raw.filter(s => !existingNames.has(s.name.toLowerCase()))
+  } catch {
+    extSpells.value = []
+  } finally {
+    extLoading.value = false
+  }
+}
+
+async function toggleExtended() {
+  extendedOn.value = !extendedOn.value
+  localStorage.setItem('hs_ext_spells', extendedOn.value ? '1' : '0')
+  if (extendedOn.value) await loadExtended(props.modelValue.class)
+  else extSpells.value = []
+}
+
+const accessibleSpells = computed(() => {
+  const base = store.availableSpells.filter(s => s.level_int === 0 || s.level_int <= maxSpellLevel.value)
+  if (!extendedOn.value) return base
+  const ext  = extSpells.value.filter(s => s.level_int === 0 || s.level_int <= maxSpellLevel.value)
+  return [...base, ...ext]
+})
 
 const levelTabs = computed(() => {
   const levels = [...new Set(accessibleSpells.value.map(s => s.level_int))].sort((a, b) => a - b)
@@ -164,13 +206,14 @@ watch(
   (className, oldClass) => {
     if (oldClass && className !== oldClass) {
       emit('update:modelValue', { ...props.modelValue, spells: [] })
+      extSpells.value = []
     }
     search.value = ''
     activeLevel.value = -1
     if (className && SPELLCASTING_CLASSES.has(className)) {
       store.loadSpells(className)
+      loadExtended(className)
     }
   },
-  { immediate: true },
-)
+  { immediate: true },)
 </script>

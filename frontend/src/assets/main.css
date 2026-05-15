@@ -108,6 +108,15 @@ html.dark {
   .grid.grid-cols-3, .grid.grid-cols-2 { break-inside: avoid; }
 }
 
+/* ── Scrollbar ──────────────────────────────────────────────────────── */
+/* Webkit (Chrome, Safari, Edge) */
+::-webkit-scrollbar              { width: 6px; height: 6px; }
+::-webkit-scrollbar-track        { background: transparent; }
+::-webkit-scrollbar-thumb        { background: rgb(var(--c-600)); border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover  { background: rgb(var(--c-500)); }
+/* Firefox */
+*                                { scrollbar-width: thin; scrollbar-color: rgb(var(--c-600)) transparent; }
+
 /* ── Base ───────────────────────────────────────────────────────────── */
 @layer base {
   body {
