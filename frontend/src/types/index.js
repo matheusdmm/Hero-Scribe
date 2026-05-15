@@ -278,7 +278,7 @@ export function emptyCharacter() {
     playerName: '',
     createdAt: null,
     gold: 0,
-    languages: [],
+    languages: ['Common'],
     equipment: [],
     weapons: [],
     spells: [],
