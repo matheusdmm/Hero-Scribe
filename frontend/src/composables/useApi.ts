@@ -34,8 +34,7 @@ export function useApi() {
   }
 
   async function fetchSpells(className: string): Promise<Spell[]> {
-    const name = className.charAt(0).toUpperCase() + className.slice(1)
-    let url: string | null = `${OPEN5E}/v1/spells/?dnd_class=${name}&ordering=level_int,name&limit=100`
+    let url: string | null = `${OPEN5E}/v1/spells/?spell_lists=${className}&ordering=level_int,name&limit=100`
     const spells: Spell[] = []
     let pages = 0
     const MAX_PAGES = 20
