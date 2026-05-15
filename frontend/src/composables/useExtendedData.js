@@ -70,10 +70,42 @@ export async function getExtendedSpells(className) {
     .map(mapSpell)
 }
 
-// Returns WotC item names (strings), optionally filtered by a query.
+function parseProps(raw) {
+  if (!raw) return {}
+  const out = {}
+  for (const [k, v] of Object.entries(raw)) {
+    if (v === null || v === '' || v === undefined) continue
+    if (typeof v === 'string') {
+      const t = v.trim()
+      if (t.startsWith('[') || t.startsWith('{')) {
+        try { out[k] = JSON.parse(t); continue } catch {}
+      }
+    }
+    out[k] = v
+  }
+  return out
+}
+
+function mapItem(e) {
+  const p = parseProps(e.properties)
+  return {
+    name:        e.name,
+    description: e.description || '',
+    book:        e.book,
+    damage:      p['Damage']      ?? null,
+    damageType:  p['Damage Type'] ?? null,
+    category:    p['Category']    ?? null,
+    weaponProps: p['Properties']  ?? null,
+    cost:        p['Cost']        ?? null,
+    weight:      p['Weight']      ?? null,
+    armorClass:  p['Armor Class'] ?? null,
+    armorType:   p['Armor Type']  ?? null,
+  }
+}
+
 export async function getExtendedItems() {
   const all = await fetchCategory('items')
-  return all.map(e => e.name).sort()
+  return all.map(mapItem).sort((a, b) => a.name.localeCompare(b.name))
 }
 
 // Generic composable used by ContentLibraryView.

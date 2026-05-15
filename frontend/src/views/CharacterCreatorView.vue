@@ -2,7 +2,9 @@
   <div class="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
     <StepIndicator :steps="STEPS" :current="store.currentStep" class="mb-10" />
 
-    <div v-if="store.loading" class="text-center py-20 text-stone-400">Loading...</div>
+    <div v-if="store.loading" class="flex justify-center py-20 text-stone-400">
+      <LoadingSpinner class="w-8 h-8" />
+    </div>
     <div v-else-if="store.error" class="text-center py-10 text-red-500">{{ store.error }}</div>
 
     <div v-else class="bg-stone-900 rounded-2xl border border-stone-700 p-8 shadow-card">
@@ -41,6 +43,7 @@ import { computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCharacterStore } from '@/stores/character.js'
 import StepIndicator from '@/components/ui/StepIndicator.vue'
+import LoadingSpinner from '@/components/ui/LoadingSpinner.vue'
 import DetailsStep   from '@/components/character/DetailsStep.vue'
 import RaceSelector  from '@/components/character/RaceSelector.vue'
 import ClassSelector from '@/components/character/ClassSelector.vue'

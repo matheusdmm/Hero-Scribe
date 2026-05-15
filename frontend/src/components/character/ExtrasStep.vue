@@ -134,46 +134,55 @@
 
         <!-- Extended items browser -->
         <div class="mt-3">
-          <button
-            type="button"
-            @click="toggleExtItems"
-            :disabled="extItemsLoading"
-            class="flex items-center gap-1 text-xs transition-colors disabled:opacity-50"
-            :class="extItemsOn ? 'text-gold' : 'text-stone-500 hover:text-stone-300'"
-          >
-            <svg v-if="extItemsLoading" class="w-3 h-3 animate-spin" viewBox="0 0 24 24" fill="none">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/>
-            </svg>
-            <svg v-else class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
-              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
-            </svg>
-            {{ extItemsLoading ? 'Loading…' : extItemsOn ? 'Extended items on' : 'Browse extended items (WotC)' }}
-          </button>
+          <ExtendedToggle
+            :model-value="extItemsOn"
+            :loading="extItemsLoading"
+            label="Browse extended items (WotC)"
+            @update:model-value="toggleExtItems"
+          />
 
-          <div v-if="extItemsOn" class="mt-2 space-y-2">
-            <input
-              v-model="extItemSearch"
-              type="text"
+          <Combobox v-if="extItemsOn" @update:modelValue="addExtItem" nullable class="mt-2">
+            <ComboboxInput
               placeholder="Search WotC items…"
+              :displayValue="() => extItemSearch"
+              @change="extItemSearch = $event.target.value"
               class="w-full bg-stone-800 border border-stone-600 text-parchment px-3 py-2
                      focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20
                      placeholder-stone-500 rounded-md shadow-input text-sm transition-shadow"
             />
-            <div v-if="filteredExtItems.length" class="max-h-48 overflow-y-auto rounded-md border border-stone-700 divide-y divide-stone-800">
-              <button
+            <ComboboxOptions
+              v-if="filteredExtItems.length"
+              class="mt-1 max-h-64 overflow-y-auto rounded-md border border-stone-700 divide-y divide-stone-800 bg-stone-900 shadow-xl"
+            >
+              <ComboboxOption
                 v-for="item in filteredExtItems"
-                :key="item"
-                type="button"
-                @click="addExtItem(item)"
-                class="w-full text-left px-3 py-2 text-sm text-stone-300 hover:bg-stone-800 hover:text-parchment transition-colors"
+                :key="item.name"
+                :value="item"
+                v-slot="{ active }"
               >
-                {{ item }}
-              </button>
-            </div>
-            <p v-else-if="extItemSearch" class="text-xs text-stone-500">No items match "{{ extItemSearch }}"</p>
-          </div>
+                <div
+                  class="px-3 py-2.5 cursor-pointer transition-colors"
+                  :class="active ? 'bg-stone-800 text-parchment' : 'text-stone-300'"
+                >
+                  <div class="text-sm font-medium leading-tight">{{ item.name }}</div>
+                  <div class="flex flex-wrap gap-x-2 mt-0.5">
+                    <span v-if="item.damage && item.damageType" class="text-xs text-gold/80">
+                      {{ item.damage }} {{ item.damageType }}
+                    </span>
+                    <span v-else-if="item.armorClass" class="text-xs text-gold/80">
+                      AC {{ item.armorClass }}<span v-if="item.armorType"> · {{ item.armorType }}</span>
+                    </span>
+                    <span v-if="item.weaponProps" class="text-xs text-stone-500">{{ item.weaponProps }}</span>
+                    <span v-if="item.cost" class="text-xs text-stone-500">{{ item.cost }}</span>
+                    <span v-if="!item.damage && !item.armorClass && !item.cost && item.category" class="text-xs text-stone-500">{{ item.category }}</span>
+                  </div>
+                </div>
+              </ComboboxOption>
+            </ComboboxOptions>
+            <p v-else-if="extItemSearch.trim()" class="mt-1 text-xs text-stone-500">
+              No items match "{{ extItemSearch }}"
+            </p>
+          </Combobox>
         </div>
       </section>
 
@@ -204,6 +213,10 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import {
+  Combobox, ComboboxInput, ComboboxOptions, ComboboxOption,
+} from '@headlessui/vue'
+import ExtendedToggle from '@/components/ui/ExtendedToggle.vue'
 import {
   ALL_LANGUAGES, RACE_LANGUAGES,
   CLASS_GOLD_ROLLS, CLASS_STARTING_EQUIPMENT,
@@ -294,28 +307,32 @@ const allExtItems     = ref([])
 const filteredExtItems = computed(() => {
   const q = extItemSearch.value.toLowerCase().trim()
   if (!q) return []
-  return allExtItems.value.filter(n => n.toLowerCase().includes(q)).slice(0, 40)
+  return allExtItems.value.filter(item => item.name.toLowerCase().includes(q)).slice(0, 40)
 })
+
+async function loadExtItems() {
+  if (allExtItems.value.length > 0) return
+  extItemsLoading.value = true
+  try { allExtItems.value = await getExtendedItems() } catch {}
+  extItemsLoading.value = false
+}
 
 async function toggleExtItems() {
   extItemsOn.value = !extItemsOn.value
   localStorage.setItem('hs_ext_items', extItemsOn.value ? '1' : '0')
-  if (extItemsOn.value && allExtItems.value.length === 0) {
-    extItemsLoading.value = true
-    try { allExtItems.value = await getExtendedItems() } catch {}
-    extItemsLoading.value = false
-  }
+  if (extItemsOn.value) await loadExtItems()
   if (!extItemsOn.value) extItemSearch.value = ''
 }
 
-function addExtItem(name) {
-  if (!props.modelValue.equipment.includes(name)) {
-    update('equipment', [...props.modelValue.equipment, name])
+function addExtItem(item) {
+  if (!item) return
+  if (!props.modelValue.equipment.includes(item.name)) {
+    update('equipment', [...props.modelValue.equipment, item.name])
   }
   extItemSearch.value = ''
 }
 
-if (extItemsOn.value) toggleExtItems()
+if (extItemsOn.value) loadExtItems()
 
 const personalityFields = [
   { key: 'trait', label: 'Personality Trait', placeholder: 'How does your character behave?' },

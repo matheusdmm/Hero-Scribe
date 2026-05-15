@@ -51,23 +51,12 @@
       <div>
         <div class="flex items-center justify-between mb-1">
           <label class="text-sm text-stone-400">Background</label>
-          <button
-            type="button"
-            @click="toggleExtended"
-            :disabled="extLoading"
-            class="flex items-center gap-1 text-xs transition-colors disabled:opacity-50"
-            :class="extendedOn ? 'text-gold' : 'text-stone-500 hover:text-stone-300'"
-          >
-            <svg v-if="extLoading" class="w-3 h-3 animate-spin" viewBox="0 0 24 24" fill="none">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/>
-            </svg>
-            <svg v-else class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
-              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
-            </svg>
-            {{ extLoading ? 'Loading…' : extendedOn ? 'Extended on' : 'Extended content' }}
-          </button>
+          <ExtendedToggle
+            :model-value="extendedOn"
+            :loading="extLoading"
+            label="Extended content"
+            @update:model-value="toggleExtended"
+          />
         </div>
         <select
           :value="modelValue.background"
@@ -133,6 +122,7 @@
 import { ref } from 'vue'
 import { BACKGROUNDS, ALIGNMENTS } from '@/types/index.js'
 import { useExtendedData } from '@/composables/useExtendedData.js'
+import ExtendedToggle from '@/components/ui/ExtendedToggle.vue'
 
 const props = defineProps({
   modelValue: { type: Object, required: true },
@@ -150,23 +140,25 @@ const extError      = ref(null)
 
 const { entries, loading, error, load } = useExtendedData()
 
+async function fetchExtended() {
+  if (extBackgrounds.value.length > 0) return
+  extLoading.value = true
+  extError.value = null
+  await load('backgrounds')
+  extLoading.value = false
+  extError.value = error.value
+  const coreSet = new Set(BACKGROUNDS)
+  extBackgrounds.value = entries.value
+    .map(e => e.name)
+    .filter(n => !coreSet.has(n))
+    .sort()
+}
+
 async function toggleExtended() {
   extendedOn.value = !extendedOn.value
   localStorage.setItem('hs_ext_backgrounds', extendedOn.value ? '1' : '0')
-  if (extendedOn.value && extBackgrounds.value.length === 0) {
-    extLoading.value = true
-    extError.value = null
-    await load('backgrounds')
-    extLoading.value = loading.value
-    extError.value = error.value
-    const coreSet = new Set(BACKGROUNDS)
-    extBackgrounds.value = entries.value
-      .map(e => e.name)
-      .filter(n => !coreSet.has(n))
-      .sort()
-  }
+  if (extendedOn.value) await fetchExtended()
 }
 
-// Auto-load if toggle was already on from a previous session
-if (extendedOn.value) toggleExtended()
+if (extendedOn.value) fetchExtended()
 </script>

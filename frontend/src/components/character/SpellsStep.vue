@@ -10,8 +10,9 @@
     </div>
 
     <!-- Loading -->
-    <div v-else-if="store.spellsLoading" class="text-center py-16 text-stone-400">
-      Loading spells…
+    <div v-else-if="store.spellsLoading" class="flex items-center justify-center py-16 text-stone-500 gap-3" aria-live="polite">
+      <LoadingSpinner class="w-5 h-5" />
+      <span class="text-sm">Loading spells…</span>
     </div>
 
     <!-- No spells available at this level -->
@@ -33,23 +34,12 @@
           Selected: <strong class="text-gold">{{ selectedCount }}</strong>
         </span>
         <span class="text-stone-600">·</span>
-        <button
-          type="button"
-          @click="toggleExtended"
-          :disabled="extLoading"
-          class="flex items-center gap-1 text-xs transition-colors disabled:opacity-50"
-          :class="extendedOn ? 'text-gold' : 'text-stone-500 hover:text-stone-300'"
-        >
-          <svg v-if="extLoading" class="w-3 h-3 animate-spin" viewBox="0 0 24 24" fill="none">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/>
-          </svg>
-          <svg v-else class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
-            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
-          </svg>
-          {{ extLoading ? 'Loading…' : extendedOn ? 'Extended on' : 'Extended content' }}
-        </button>
+        <ExtendedToggle
+          :model-value="extendedOn"
+          :loading="extLoading"
+          label="Extended content"
+          @update:model-value="toggleExtended"
+        />
       </div>
 
       <!-- Search + level tabs -->
@@ -112,6 +102,8 @@ import { ref, computed, watch } from 'vue'
 import { SPELLCASTING_CLASSES, SPELLCASTING_ABILITY, getSpellSlots, SPELL_LEVEL_LABELS } from '@/types/index.js'
 import { useCharacterStore } from '@/stores/character.js'
 import { getExtendedSpells } from '@/composables/useExtendedData.js'
+import ExtendedToggle from '@/components/ui/ExtendedToggle.vue'
+import LoadingSpinner from '@/components/ui/LoadingSpinner.vue'
 
 const props = defineProps({
   modelValue: { type: Object, required: true },

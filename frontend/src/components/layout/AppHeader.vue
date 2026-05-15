@@ -8,7 +8,7 @@
       </RouterLink>
 
       <!-- Desktop nav -->
-      <nav class="hidden sm:flex items-center gap-6">
+      <nav aria-label="Main navigation" class="hidden sm:flex items-center gap-6">
         <RouterLink to="/" class="text-stone-400 hover:text-parchment transition-colors text-sm">
           Home
         </RouterLink>
