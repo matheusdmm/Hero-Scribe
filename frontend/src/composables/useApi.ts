@@ -34,7 +34,11 @@ export function useApi() {
   }
 
   async function fetchSpells(className: string): Promise<Spell[]> {
-    let url: string | null = `${OPEN5E}/v1/spells/?spell_lists=${className}&ordering=level_int,name&limit=100`
+    // Open5e does not include paladin in the spell_lists index — fall back to dnd_class
+    const filter = className === 'paladin'
+      ? `dnd_class=Paladin`
+      : `spell_lists=${className}`
+    let url: string | null = `${OPEN5E}/v1/spells/?${filter}&ordering=level_int,name&limit=100`
     const spells: Spell[] = []
     let pages = 0
     const MAX_PAGES = 20
