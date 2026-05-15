@@ -213,7 +213,7 @@ import {
   ALL_LANGUAGES, RACE_LANGUAGES,
   CLASS_GOLD_ROLLS, CLASS_STARTING_EQUIPMENT,
   WEAPONS, isProficientWith,
-} from '@/types/index.js'
+} from '@/types'
 import { useCharacterStore } from '@/stores/character.js'
 import { getExtendedItems } from '@/composables/useExtendedData.js'
 

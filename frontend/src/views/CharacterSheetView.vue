@@ -443,7 +443,7 @@ import { useCharacterStore } from '@/stores/character.js'
 import {
   ABILITY_NAMES, ABILITY_LABELS, SKILL_MAP, WEAPONS, isProficientWith,
   SPELLCASTING_CLASSES, SPELLCASTING_ABILITY, getSpellSlots, SPELL_LEVEL_LABELS,
-} from '@/types/index.js'
+} from '@/types'
 import { formatMod } from '@/composables/useAbilityScores.js'
 
 const store = useCharacterStore()

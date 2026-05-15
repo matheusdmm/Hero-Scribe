@@ -13,7 +13,7 @@ import { describe, it, expect, beforeAll } from 'vitest'
 import {
   getSpellSlots, emptyCharacter, isProficientWith,
   WEAPONS, RACE_LANGUAGES, SPELLCASTING_CLASSES,
-} from './src/types/index.js'
+} from './src/types'
 import { getExtendedItems } from './src/composables/useExtendedData.js'
 
 const LOCAL_API = 'http://localhost:3000/api'

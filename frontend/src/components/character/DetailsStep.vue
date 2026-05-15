@@ -120,7 +120,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { BACKGROUNDS, ALIGNMENTS } from '@/types/index.js'
+import { BACKGROUNDS, ALIGNMENTS } from '@/types'
 import { useExtendedData } from '@/composables/useExtendedData.js'
 import ExtendedToggle from '@/components/ui/ExtendedToggle.vue'
 

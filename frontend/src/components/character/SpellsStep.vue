@@ -99,7 +99,7 @@
 
 <script setup>
 import { ref, computed, watch } from 'vue'
-import { SPELLCASTING_CLASSES, SPELLCASTING_ABILITY, getSpellSlots, SPELL_LEVEL_LABELS } from '@/types/index.js'
+import { SPELLCASTING_CLASSES, SPELLCASTING_ABILITY, getSpellSlots, SPELL_LEVEL_LABELS } from '@/types'
 import { useCharacterStore } from '@/stores/character.js'
 import { getExtendedSpells } from '@/composables/useExtendedData.js'
 import ExtendedToggle from '@/components/ui/ExtendedToggle.vue'

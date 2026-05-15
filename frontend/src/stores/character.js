@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { emptyCharacter } from '@/types/index.js'
+import { emptyCharacter } from '@/types'
 import { useApi } from '@/composables/useApi.js'
 
 export const useCharacterStore = defineStore('character', () => {

@@ -73,7 +73,7 @@
 <script setup>
 import { ref, computed, reactive } from 'vue'
 import AbilityScoreInput from '@/components/ui/AbilityScoreInput.vue'
-import { ABILITY_NAMES, ABILITY_LABELS } from '@/types/index.js'
+import { ABILITY_NAMES, ABILITY_LABELS } from '@/types'
 import { useAbilityScores } from '@/composables/useAbilityScores.js'
 
 const props = defineProps({

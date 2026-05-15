@@ -66,7 +66,7 @@
 <script setup>
 import { computed, onMounted } from 'vue'
 import { useCharacterStore } from '@/stores/character.js'
-import { SKILL_MAP, ABILITY_LABELS } from '@/types/index.js'
+import { SKILL_MAP, ABILITY_LABELS } from '@/types'
 import { modifier, formatMod } from '@/composables/useAbilityScores.js'
 
 const props = defineProps({
