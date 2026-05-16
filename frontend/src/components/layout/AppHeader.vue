@@ -122,7 +122,7 @@
   </header>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useCharacterStore } from '@/stores/character'

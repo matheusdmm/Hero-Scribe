@@ -41,6 +41,7 @@ export interface DnDClass {
   skill_choices: number
   available_skills: string[]
   weapon_proficiencies: string[]
+  armor_proficiencies: string[]
 }
 
 export interface SelectedSpell {
